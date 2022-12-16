@@ -1,0 +1,35 @@
+{
+  "default_args": {
+    "owner": "airflow",
+    "start_date": "2022, 12, 16",
+    "retry_delay": "5"
+  },
+  "name": "demo_dynamic_dag_2",
+  "nodes": [
+    {
+      "name": "ExecuteBashCommand",
+      "_type": "BashOperator",
+      "parameters": {
+        "bash_command": "echo test"
+      }
+    },
+    {
+      "name": "ExecutePythonCode",
+      "_type": "PythonOperator",
+      "parameters": {},
+      "func": "log_details"
+    },
+    {
+      "name": "ExecuteSparkCode",
+      "_type": "SparkSubmitOperator",
+      "parameters": {
+        "conn_id": "spark_default",
+        "application": "/opt/airflow/dags/spark/spark_example.py"
+      }
+    }
+  ],
+  "connections": {
+    "ExecuteBashCommand": ["ExecuteSparkCode"],
+    "ExecuteSparkCode": ["ExecutePythonCode"]
+  }
+}

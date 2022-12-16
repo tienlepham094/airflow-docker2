@@ -1,13 +1,8 @@
-import logging
-import json
 from datetime import datetime, timedelta, date
-def log_details(*args, **kwargs):
-    logging.info(f"My execution date is {kwargs['ds']}")
-    logging.info(f"My execution date is {kwargs['execution_date']}")
-    
-def get_default_args(*args, **kwargs):
+import json
+def get_default_args(dict,*args, **kwargs):
     default_args = {}
-    for key, value in kwargs.items():
+    for key, value in dict.items():
         if key == "start_date":
             if value == "yesterday":
                 default_args[key] = date.today() - timedelta(days=1)
@@ -19,6 +14,13 @@ def get_default_args(*args, **kwargs):
         elif key == "retry_delay":
             default_args[key] = timedelta(minutes=int(value))
         else:
-            default_args[key] = value
+            try:
+                default_args[key] = int(value)
+            except:
+                default_args[key] = value
     return default_args
-
+file_path = './dags/config/config.json'
+with open(file_path) as f:
+    data = json.load(f)
+    print(get_default_args(data['default_args']))
+    

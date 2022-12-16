@@ -1,4 +1,11 @@
 {
+  "default_args": {
+    "owner": "airflow",
+    "start_date": "2022, 12, 13",
+    "retry_delay": "5",
+    "email_on_failure": "false",
+    "retries": "1"
+  },
   "name": "demo_dynamic_dag",
   "nodes": [
     {
@@ -28,9 +35,10 @@
       "name": "ExecuteSparkCode",
       "_type": "SparkSubmitOperator",
       "parameters": {
-        "conn_id": "spark_default",
-        "application": "/opt/airflow/dags/spark_example.py"
-      }
+        "conn_id": "spark_default"
+      },
+      "application": "spark_example.py",
+      "verbose": "true"
     }
   ],
   "connections": {

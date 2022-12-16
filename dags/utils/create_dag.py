@@ -1,10 +1,13 @@
+import json
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.bash import BashOperator
 from utils.func import log_details
-def create_dag(schedule, default_args, definition, catchup = False):
+
+
+def create_dag(schedule, default_args, definition, spark_application= None, jars = None, catchup = False, *args, **kwargs):
     """Create dags dynamically."""
     with DAG(
         definition["name"], schedule_interval=schedule, default_args=default_args, catchup=catchup
@@ -25,6 +28,12 @@ def create_dag(schedule, default_args, definition, catchup = False):
                 func_params = globals()[node['func']]
                 tasks[node_name] = PythonOperator(**params, python_callable = func_params)
             elif operator == "SparkSubmitOperator":
+                if "application" in node:
+                    params["application"] = f'{spark_application}/{node["application"]}'
+                if "verbose" in node:
+                    params["verbose"] = json.loads(node["verbose"])
+                if "jars" in node:
+                    params["jars"] = f'{jars}/{node["jars"]}'
                 tasks[node_name] = SparkSubmitOperator(**params)
         for node_name, downstream_conn in definition["connections"].items():
             for ds_task in downstream_conn:
