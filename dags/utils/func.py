@@ -21,4 +21,7 @@ def get_default_args(*args, **kwargs):
         else:
             default_args[key] = value
     return default_args
-
+def get_job_name(path):
+    f = open(path)
+    definition = json.load(f)
+    return definition["name"]
