@@ -28,7 +28,13 @@ def compare_time(df, data, path_os):
                 "status": 1
             }
                 df = pd.concat([pd.DataFrame([new_row]), df], ignore_index=True)
-
+    elif df.shape[0] > len(data):
+        col_list = list(df['job_name'])
+        data_job_name = [data[i][1] for i in range(len(data))]
+        for i in col_list:
+            if i not in data_job_name:
+                df.drop(df.loc[df['job_name']==i].index, inplace=True)
+                
     for index, row in df.iterrows():
         for i in range(len(data)):
             if data[i][1] == row['job_name']:
@@ -37,7 +43,6 @@ def compare_time(df, data, path_os):
                     df.loc[index, ['last_modification']] = data[i][0]
 
     print(df.head())
-        
     # write new csv
     df.to_csv(f'{path_os}/dags/csv/time_modifier.csv', mode='w+', index = False) 
         
@@ -48,6 +53,8 @@ if __name__ == "__main__":
     data_new = get_new_modifier(file_path)
     df = read_csv(f'{path_os}/dags/csv/time_modifier.csv')
     compare_time(df, data_new, path_os)
+    
+    
 
     
         
