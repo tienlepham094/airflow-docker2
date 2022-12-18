@@ -39,11 +39,11 @@ with DAG('trigger_dag',
         task_id = "reset_status",
         python_callable = _reset_dag_change
     )
-    trigger_target = TriggerDagRunOperator(
-        task_id='trigger_target',
-        trigger_dag_id='demo_dynamic_dag',
-        execution_date='{{ ds }}',
-        wait_for_completion=True,
-        reset_dag_run=True
-    )
-    reading >> trigger_target >> reset_status
+    # trigger_target = TriggerDagRunOperator(
+    #     task_id='trigger_target',
+    #     trigger_dag_id='demo_dynamic_dag',
+    #     execution_date='{{ ds }}',
+    #     wait_for_completion=True,
+    #     reset_dag_run=True
+    # )
+    reading  >> reset_status
