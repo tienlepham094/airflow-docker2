@@ -1,4 +1,3 @@
-import json
 from airflow import DAG
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 from airflow.operators.python_operator import PythonOperator
@@ -30,8 +29,6 @@ def create_dag(schedule, default_args, definition, spark_application= None, jars
             elif operator == "SparkSubmitOperator":
                 if "application" in node:
                     params["application"] = f'{spark_application}/{node["application"]}'
-                if "verbose" in node:
-                    params["verbose"] = json.loads(node["verbose"])
                 if "jars" in node:
                     params["jars"] = f'{jars}/{node["jars"]}'
                 tasks[node_name] = SparkSubmitOperator(**params)

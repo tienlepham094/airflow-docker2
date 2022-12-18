@@ -27,7 +27,7 @@ def _reset_dag_change():
             
 
 with DAG('trigger_dag', 
-    schedule_interval='@daily', 
+    schedule_interval='30 * * * *', 
     default_args=default_args, 
     catchup=False) as dag:
 
@@ -43,6 +43,7 @@ with DAG('trigger_dag',
         task_id='trigger_target',
         trigger_dag_id='demo_dynamic_dag',
         execution_date='{{ ds }}',
-        wait_for_completion=True
+        wait_for_completion=True,
+        reset_dag_run=True
     )
     reading >> trigger_target >> reset_status

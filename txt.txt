@@ -1,1 +1,9 @@
 docker exec -it airflow-docker-airflow-worker-1 /bin/bash
+spark_default
+spark://spark
+port: 7077
+
+crontab -e
+
+30 * * * * /usr/bin/python3 /home/tienlepham/Workspace/airflow-docker2/dags/utils/compare_time_modify.py
+
