@@ -35,7 +35,8 @@ with DAG('trigger_dag_2',
             task_id=f'trigger_{i}',      
             trigger_dag_id= i,
             execution_date='{{ ds }}',
-            wait_for_completion=True
+            wait_for_completion=True, 
+            reset_dag_run=True
         )
-        trigger_dag.append(trigger_target)
+        trigger_dag.append(trigger_target)  
     trigger_dag >> reset_status
