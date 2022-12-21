@@ -23,5 +23,7 @@
 # with open(file_path) as f:
 #     data = json.load(f)
 #     print(get_default_args(data['default_args']))
-
+from dags.utils.dag_id import DagID
+dagID = DagID()
+print(dagID.job_name)
     
