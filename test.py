@@ -23,9 +23,5 @@
 # with open(file_path) as f:
 #     data = json.load(f)
 #     print(get_default_args(data['default_args']))
-import os.path, time
-print(time.ctime(os.path.getmtime("./dags/config/config.json")))
-
-
 
     
